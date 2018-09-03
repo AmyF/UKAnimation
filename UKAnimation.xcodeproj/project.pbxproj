@@ -12,6 +12,9 @@
 		9ABB0CA6213CF56800BE8A74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ABB0CA4213CF56800BE8A74 /* Main.storyboard */; };
 		9ABB0CA8213CF57000BE8A74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9ABB0CA7213CF57000BE8A74 /* Assets.xcassets */; };
 		9ABB0CAB213CF57000BE8A74 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ABB0CA9213CF57000BE8A74 /* LaunchScreen.storyboard */; };
+		9ABB0CB7213CF61D00BE8A74 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9ABB0CB5213CF61D00BE8A74 /* README.md */; };
+		9ABB0CB8213CF61D00BE8A74 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9ABB0CB6213CF61D00BE8A74 /* LICENSE */; };
+		9ABB0CBA213CF63100BE8A74 /* UKAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABB0CB9213CF63100BE8A74 /* UKAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +25,9 @@
 		9ABB0CA7213CF57000BE8A74 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9ABB0CAA213CF57000BE8A74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9ABB0CAC213CF57000BE8A74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9ABB0CB5213CF61D00BE8A74 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		9ABB0CB6213CF61D00BE8A74 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		9ABB0CB9213CF63100BE8A74 /* UKAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UKAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +44,9 @@
 		9ABB0C94213CF56800BE8A74 = {
 			isa = PBXGroup;
 			children = (
+				9ABB0CB6213CF61D00BE8A74 /* LICENSE */,
+				9ABB0CB5213CF61D00BE8A74 /* README.md */,
+				9ABB0CB4213CF61400BE8A74 /* Source */,
 				9ABB0C9F213CF56800BE8A74 /* UKAnimation */,
 				9ABB0C9E213CF56800BE8A74 /* Products */,
 			);
@@ -62,6 +71,14 @@
 				9ABB0CAC213CF57000BE8A74 /* Info.plist */,
 			);
 			path = UKAnimation;
+			sourceTree = "<group>";
+		};
+		9ABB0CB4213CF61400BE8A74 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				9ABB0CB9213CF63100BE8A74 /* UKAnimation.swift */,
+			);
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,7 +141,9 @@
 			files = (
 				9ABB0CAB213CF57000BE8A74 /* LaunchScreen.storyboard in Resources */,
 				9ABB0CA8213CF57000BE8A74 /* Assets.xcassets in Resources */,
+				9ABB0CB7213CF61D00BE8A74 /* README.md in Resources */,
 				9ABB0CA6213CF56800BE8A74 /* Main.storyboard in Resources */,
+				9ABB0CB8213CF61D00BE8A74 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,6 +154,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9ABB0CBA213CF63100BE8A74 /* UKAnimation.swift in Sources */,
 				9ABB0CA3213CF56800BE8A74 /* ViewController.swift in Sources */,
 				9ABB0CA1213CF56800BE8A74 /* AppDelegate.swift in Sources */,
 			);
