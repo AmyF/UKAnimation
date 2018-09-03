@@ -17,6 +17,8 @@ class CustomBtn: UIButton {
 class ViewController: UIViewController {
 
     typealias Animate = UKAnimation
+    typealias GroupAnimate = UKGroupAnimation
+    
     @IBOutlet weak var btn: UIButton!
     
     var cBtn: CustomBtn! = CustomBtn(frame: CGRect(x: 100, y: 200, width: 60, height: 60))
@@ -30,6 +32,7 @@ class ViewController: UIViewController {
         cBtn.backgroundColor = .green
         cBtn.addTarget(self, action: #selector(cBtnMove), for: .touchUpInside)
         self.view.addSubview(cBtn)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,26 +41,45 @@ class ViewController: UIViewController {
     }
     
     @objc func cBtnMove() {
-        let x = cBtn.frame.origin.x
-        let y = cBtn.frame.origin.y
-        Animate(view: cBtn).set(duration: 2).move(to: [x+100,y+100])
-        { animation in
-            print(animation)
-            let bounds = self.view.bounds
-            animation.set(duration: 2).move(center: [bounds.midX,bounds.midY])
-            { animation in
-                animation.view.removeFromSuperview()
-                self.cBtn = nil
-            }
-        }
+        GroupAnimate(view: cBtn)
+            .fade(from: 1, to: 0)
+            .afterEnd(GroupAnimate.Item {
+                print("fade 1->0 done")
+            }).move(x: 200).afterEnd(UKGroupAnimation.Item{
+                print("move x -> 200 done")
+            }).run()
     }
 
     @IBAction func tap(_ sender: Any) {
-        Animate(view: btn)
-            .set(duration: 2)
-            .set(damping: 2)
-            .scale(to: [2,2])
+        let v1 = UIView(frame: CGRect(x: 50, y: 300, width: 60, height: 60))
+        v1.backgroundColor = .blue
+        self.view.addSubview(v1)
+        let v2 = UIView(frame: CGRect(x: 150, y: 300, width: 60, height: 60))
+        v2.backgroundColor = .orange
+        self.view.addSubview(v2)
+        animate1(view: v1)
+        animate2(view: v2)
     }
     
+    func animate1(view: UIView) {
+        Animate(view: view)
+            .set(duration: 4)
+            .set(damping: 4)
+            .set(velocity: 5)
+            .scale(to: [2,2])
+            .move(offset: [50,50])
+    }
+    
+    func animate2(view: UIView) {
+        Animate(view: view)
+            .set(duration: 4)
+            .set(damping: 4)
+            .set(velocity: 5)
+            .scale(to: [2,2])
+            .move(offset: [50,50])
+            .after(1) { (animate) in
+                animate.stop()
+        }
+    }
 }
 
