@@ -28,7 +28,7 @@ class UKAnimation {
     }
     
     // MARK: Operation
-    func run() {
+    public func run() {
         for animate in animations {
             layer.add(animate, forKey: nil)
         }
@@ -39,7 +39,7 @@ class UKAnimation {
     ///
     /// - Returns: self
     @discardableResult
-    func group() -> Self {
+    public func group() -> Self {
         let group = CAAnimationGroup()
         group.animations = animations
         
@@ -52,19 +52,19 @@ class UKAnimation {
     /// - Parameter animation: CAAnimation
     /// - Returns: self
     @discardableResult
-    func add(animation: CAAnimation) -> Self {
+    public func add(animation: CAAnimation) -> Self {
         animations.append(animation)
         return self
     }
     
     @discardableResult
-    func add(animation handler: (CALayer) -> CAAnimation) -> Self {
+    public func add(animation handler: (CALayer) -> CAAnimation) -> Self {
         animations.append(handler(layer))
         return self
     }
     
     @discardableResult
-    func forEach(handler: (CALayer, CAAnimation) -> Bool) -> Self {
+    public func forEach(handler: (CALayer, CAAnimation) -> Bool) -> Self {
         for anim in animations {
             if handler(layer,anim) { break }
         }
@@ -72,19 +72,19 @@ class UKAnimation {
     }
     
     @discardableResult
-    func handler(begin: Item.Handler?=nil, end: Item.Handler?=nil) -> Self {
+    public func handler(begin: Item.Handler?=nil, end: Item.Handler?=nil) -> Self {
         animations.last?.delegate = Item(begin: begin, end: end)
         return self
     }
     
     @discardableResult
-    func modify<A: CAAnimation>(aniamtion handler: (A?) -> Swift.Void) -> Self {
+    public func modify<A: CAAnimation>(aniamtion handler: (A?) -> Swift.Void) -> Self {
         handler(animations.last as? A)
         return self
     }
     
     @discardableResult
-    func stay() -> Self {
+    public func stay() -> Self {
         if let anim = animations.last {
             anim.fillMode = kCAFillModeForwards
             anim.isRemovedOnCompletion = false
@@ -93,13 +93,13 @@ class UKAnimation {
     }
     
     @discardableResult
-    func duration(_ duration: CFTimeInterval) -> Self {
+    public func duration(_ duration: CFTimeInterval) -> Self {
         animations.last?.duration = duration
         return self
     }
     
     @discardableResult
-    func after(begin offset: CFTimeInterval, willGroup: Bool=false) -> Self {
+    public func after(begin offset: CFTimeInterval, willGroup: Bool=false) -> Self {
         if willGroup {
             animations.last?.beginTime = offset
         } else {
@@ -110,7 +110,7 @@ class UKAnimation {
     }
     
     // MARK: Setter
-    class Item: NSObject, CAAnimationDelegate {
+    public class Item: NSObject, CAAnimationDelegate {
         deinit {
             print("AnimationItem[] was deinit")
         }
@@ -139,7 +139,7 @@ class UKAnimation {
 // MARK: Animation
 extension UKAnimation {
     @discardableResult
-    func fade(from: CGFloat, to: CGFloat, duration: CFTimeInterval=1) -> Self {
+    public func fade(from: CGFloat, to: CGFloat, duration: CFTimeInterval=1) -> Self {
         let animation = CABasicAnimation(keyPath: "opacity")
         animation.fromValue = from
         animation.toValue = to
@@ -149,7 +149,7 @@ extension UKAnimation {
     }
     
     @discardableResult
-    func move(from: [CGFloat]?=nil, to: [CGFloat], duration: CFTimeInterval=1) -> Self {
+    public func move(from: [CGFloat]?=nil, to: [CGFloat], duration: CFTimeInterval=1) -> Self {
         let animation = CABasicAnimation(keyPath: "position")
         if let from = from { animation.fromValue = CGPoint(x: from[0], y: from[1]) }
         animation.toValue = CGPoint(x: to[0], y: to[1])
@@ -159,7 +159,7 @@ extension UKAnimation {
     }
     
     @discardableResult
-    func move(from: CGFloat?=nil, x to: CGFloat, duration: CFTimeInterval=1) -> Self {
+    public func move(from: CGFloat?=nil, x to: CGFloat, duration: CFTimeInterval=1) -> Self {
         let animation = CABasicAnimation(keyPath: "position.x")
         animation.fromValue = from
         animation.toValue = to
@@ -169,7 +169,7 @@ extension UKAnimation {
     }
     
     @discardableResult
-    func move(from: CGFloat?=nil, y to: CGFloat, duration: CFTimeInterval=1) -> Self {
+    public func move(from: CGFloat?=nil, y to: CGFloat, duration: CFTimeInterval=1) -> Self {
         let animation = CABasicAnimation(keyPath: "position.y")
         animation.fromValue = from
         animation.toValue = to
@@ -179,7 +179,7 @@ extension UKAnimation {
     }
     
     @discardableResult
-    func move(from: [CGFloat]?=nil, offset to: [CGFloat], duration: CFTimeInterval=1) -> Self {
+    public func move(from: [CGFloat]?=nil, offset to: [CGFloat], duration: CFTimeInterval=1) -> Self {
         let to = [
             (layer.presentation()?.frame.origin.x ?? layer.frame.origin.x) + to[0],
             (layer.presentation()?.frame.origin.y ?? layer.frame.origin.y) + to[1],
@@ -188,13 +188,13 @@ extension UKAnimation {
     }
     
     @discardableResult
-    func move(from: CGFloat?=nil, offsetX to: CGFloat, duration: CFTimeInterval=1) -> Self {
+    public func move(from: CGFloat?=nil, offsetX to: CGFloat, duration: CFTimeInterval=1) -> Self {
         let x = (layer.presentation()?.frame.origin.x ?? layer.frame.origin.x) + to
         return move(from: from, x: x, duration: duration)
     }
     
     @discardableResult
-    func move(from: CGFloat?=nil, offsetY to: CGFloat, duration: CFTimeInterval=1) -> Self {
+    public func move(from: CGFloat?=nil, offsetY to: CGFloat, duration: CFTimeInterval=1) -> Self {
         let y = (layer.presentation()?.frame.origin.y ?? layer.frame.origin.y) + to
         return move(from: from, y: y, duration: duration)
     }
@@ -202,7 +202,7 @@ extension UKAnimation {
 
 extension UKAnimation {
     @discardableResult
-    func flip(v: Bool, duration: CFTimeInterval=1) -> Self {
+    public func flip(v: Bool, duration: CFTimeInterval=1) -> Self {
         if v {
             let anim = CABasicAnimation(keyPath: "transform.rotation.x")
             anim.toValue = Double.pi
@@ -217,7 +217,7 @@ extension UKAnimation {
     }
     
     @discardableResult
-    func shakeR(radian: Double=5, times: Float=3,duration: CFTimeInterval=0.4) -> Self {
+    public func shakeR(radian: Double=5, times: Float=3,duration: CFTimeInterval=0.4) -> Self {
         let anim = CAKeyframeAnimation(keyPath: "transform.rotation")
         anim.values = [(radian/180 * Double.pi),
                        (-radian/180 * Double.pi),
@@ -228,7 +228,7 @@ extension UKAnimation {
     }
     
     @discardableResult
-    func shakeX(range: Int=5,times: Float=3,duration: CFTimeInterval=0.4) -> Self {
+    public func shakeX(range: Int=5,times: Float=3,duration: CFTimeInterval=0.4) -> Self {
         let anim = CAKeyframeAnimation(keyPath: "transform.translation.x")
         anim.values = [range,-range,range]
         anim.repeatCount = times
@@ -237,7 +237,7 @@ extension UKAnimation {
     }
     
     @discardableResult
-    func shakeY(range: Int=5,times: Float=3,duration: CFTimeInterval=0.4) -> Self {
+    public func shakeY(range: Int=5,times: Float=3,duration: CFTimeInterval=0.4) -> Self {
         let anim = CAKeyframeAnimation(keyPath: "transform.translation.y")
         anim.values = [range,-range,range]
         anim.repeatCount = times
