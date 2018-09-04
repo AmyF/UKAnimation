@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
 
   s.author          = { "unko" => "840382477@qq.com" }
   s.platform        = :ios, "9.0"
-  s.source          = { :git => "git@github.com:AmyF/UKAnimation.git", :tag => "#{s.version}" }
+  s.source          = { :git => "https://github.com/AmyF/UKAnimation.git", :tag => s.version }
   s.source_files    = "Source", "Source/**/*.{swift}"
   s.swift_version   = "4.0"
   s.requires_arc    = true
