@@ -3,9 +3,9 @@
 
 ## Example
 ```
-UKAnimation(view: animView).shakeR().run()
+UKAnimation(animView).shakeR().run()
 // or ...
-UKAnimation(view: animView)
+UKAnimation(animView)
     .move(to: [100,100]).stay()
     .fade(from: 1, to: 0).modify{$0?.autoreverses = true}.stay()
     .move(to: [300,400]).after(begin: 1, willGroup: true).stay()
@@ -15,7 +15,7 @@ UKAnimation(view: animView)
 ```
 you can use your animation
 ```
-UKAnimation(view: animView).add { return /* your animation */}.run()
+UKAnimation(animView).add { return /* your animation */}.run()
 // or ...
 extension UKAnimation {
     // code your animation
