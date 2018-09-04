@@ -63,6 +63,9 @@ public class UKAnimation {
         return self
     }
     
+    /// 遍历当前动画
+    ///
+    /// - Returns: 是否继续遍历
     @discardableResult
     public func forEach(handler: (CALayer, CAAnimation) -> Bool) -> Self {
         for anim in animations {
