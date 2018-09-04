@@ -10,195 +10,238 @@ import UIKit
 
 
 class UKAnimation {
-    
-    #if DEBUG
     deinit {
-        print("UKAnimation<\(animateView)> was deinit \n")
+        #if DEBUG
+        print("UKGroupAnimation[\(layer)] was deinit ")
+        #endif
     }
-    #endif
     
-    typealias Then = (UKAnimation) -> Void
+    fileprivate let layer: CALayer
+    fileprivate var animations: [CAAnimation] = []
     
-    fileprivate let animateView : UIView
-    
-    fileprivate var options     : UIViewAnimationOptions = [.curveLinear]
-    fileprivate var duration    : TimeInterval = 1
-    fileprivate var delay       : TimeInterval = 0
-    fileprivate var damping     : CGFloat = 1
-    fileprivate var velocity    : CGFloat = 1
-    
-    init(view: UIView) {
-        animateView = view
+    convenience init(view: UIView) {
+        self.init(layer: view.layer)
     }
-    // MARK: getter
-    var frame: CGRect { return animateView.frame }
-    var view: UIView { return animateView }
     
-    // MARK: setter
-    @discardableResult func set(options: UIViewAnimationOptions) -> Self {
-        self.options = options
+    init(layer: CALayer) {
+        self.layer = layer
+    }
+    
+    // MARK: Operation
+    func run() {
+        for animate in animations {
+            layer.add(animate, forKey: nil)
+        }
+        animations.removeAll()
+    }
+    
+    /// 将前面添加的CAAnimation组合成一个Group
+    ///
+    /// - Returns: self
+    @discardableResult
+    func group() -> Self {
+        let group = CAAnimationGroup()
+        group.animations = animations
+        
+        animations.removeAll()
+        return add(animation: group)
+    }
+    
+    /// 添加一个动画
+    ///
+    /// - Parameter animation: CAAnimation
+    /// - Returns: self
+    @discardableResult
+    func add(animation: CAAnimation) -> Self {
+        animations.append(animation)
         return self
     }
     
-    @discardableResult func set(duration: TimeInterval) -> Self {
-        self.duration = duration
+    @discardableResult
+    func add(animation handler: (CALayer) -> CAAnimation) -> Self {
+        animations.append(handler(layer))
         return self
     }
     
-    @discardableResult func set(delay: TimeInterval) -> Self {
-        self.delay = delay
-        return self
-    }
-    
-    @discardableResult func set(damping: CGFloat) -> Self {
-        self.damping = damping
-        return self
-    }
-    
-    @discardableResult func set(velocity: CGFloat) -> Self {
-        self.velocity = velocity
-        return self
-    }
-    
-    @discardableResult func after(_ time: TimeInterval, then: @escaping Then) -> Self {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + time) {
-            then(self)
+    @discardableResult
+    func forEach(handler: (CALayer, CAAnimation) -> Bool) -> Self {
+        for anim in animations {
+            if handler(layer,anim) { break }
         }
         return self
     }
     
-    // MARK: Public Animate
     @discardableResult
-    func move(to: [CGFloat], then: Then?=nil) -> Self {
-        var toFrame = self.animateView.frame
-        if to.count > 2 {
-            toFrame = CGRect(x: to[0], y: to[1], width: to[2], height: to[3])
+    func handler(begin: Item.Handler?=nil, end: Item.Handler?=nil) -> Self {
+        animations.last?.delegate = Item(begin: begin, end: end)
+        return self
+    }
+    
+    @discardableResult
+    func modify<A: CAAnimation>(aniamtion handler: (A?) -> Swift.Void) -> Self {
+        handler(animations.last as? A)
+        return self
+    }
+    
+    @discardableResult
+    func stay() -> Self {
+        if let anim = animations.last {
+            anim.fillMode = kCAFillModeForwards
+            anim.isRemovedOnCompletion = false
+        }
+        return self
+    }
+    
+    @discardableResult
+    func duration(_ duration: CFTimeInterval) -> Self {
+        animations.last?.duration = duration
+        return self
+    }
+    
+    @discardableResult
+    func after(begin offset: CFTimeInterval, willGroup: Bool=false) -> Self {
+        if willGroup {
+            animations.last?.beginTime = offset
         } else {
-            toFrame.origin.x = to[0]
-            toFrame.origin.y = to[1]
+            animations.last?.beginTime = CACurrentMediaTime() + offset
         }
-        return move(with: toFrame, then: then)
+        
+        return self
+    }
+    
+    // MARK: Setter
+    class Item: NSObject, CAAnimationDelegate {
+        deinit {
+            print("AnimationItem[] was deinit")
+        }
+        
+        typealias Handler = (_ anim: CAAnimation) -> Swift.Void
+        
+        let begin: Handler?
+        let end: Handler?
+        
+        init(begin: Handler?, end: Handler?) {
+            self.begin = begin
+            self.end = end
+        }
+        
+        func animationDidStart(_ anim: CAAnimation) {
+            begin?(anim)
+        }
+        
+        func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+            end?(anim)
+        }
+    }
+    
+}
+
+// MARK: Animation
+extension UKAnimation {
+    @discardableResult
+    func fade(from: CGFloat, to: CGFloat, duration: CFTimeInterval=1) -> Self {
+        let animation = CABasicAnimation(keyPath: "opacity")
+        animation.fromValue = from
+        animation.toValue = to
+        animation.duration = duration
+        
+        return add(animation: animation)
     }
     
     @discardableResult
-    func move(offset: [CGFloat], then: Then?=nil) -> Self {
-        var toFrame = self.animateView.frame
-        toFrame.origin.x += offset[0]
-        toFrame.origin.y += offset[1]
-        return move(with: toFrame, then: then)
+    func move(from: [CGFloat]?=nil, to: [CGFloat], duration: CFTimeInterval=1) -> Self {
+        let animation = CABasicAnimation(keyPath: "position")
+        if let from = from { animation.fromValue = CGPoint(x: from[0], y: from[1]) }
+        animation.toValue = CGPoint(x: to[0], y: to[1])
+        animation.duration = duration
+        
+        return add(animation: animation)
     }
     
     @discardableResult
-    func move(center: [CGFloat], then: Then?=nil) -> Self {
-        var toFrame = self.animateView.frame
-        toFrame.origin.x = center[0] - toFrame.size.width/2
-        toFrame.origin.y = center[1] - toFrame.size.height/2
-        return move(with: toFrame, then: then)
+    func move(from: CGFloat?=nil, x to: CGFloat, duration: CFTimeInterval=1) -> Self {
+        let animation = CABasicAnimation(keyPath: "position.x")
+        animation.fromValue = from
+        animation.toValue = to
+        animation.duration = duration
+        
+        return add(animation: animation)
     }
     
     @discardableResult
-    func scale(to: [CGFloat], then: Then?=nil) -> Self {
-        let scr = self.animateView.layer.transform
-        var des: CATransform3D
-        if to.count > 2 {
-            des = CATransform3DScale(scr, to[0], to[1], to[2])
+    func move(from: CGFloat?=nil, y to: CGFloat, duration: CFTimeInterval=1) -> Self {
+        let animation = CABasicAnimation(keyPath: "position.y")
+        animation.fromValue = from
+        animation.toValue = to
+        animation.duration = duration
+        
+        return add(animation: animation)
+    }
+    
+    @discardableResult
+    func move(from: [CGFloat]?=nil, offset to: [CGFloat], duration: CFTimeInterval=1) -> Self {
+        let to = [
+            (layer.presentation()?.frame.origin.x ?? layer.frame.origin.x) + to[0],
+            (layer.presentation()?.frame.origin.y ?? layer.frame.origin.y) + to[1],
+            ]
+        return move(from: from, to: to, duration: duration)
+    }
+    
+    @discardableResult
+    func move(from: CGFloat?=nil, offsetX to: CGFloat, duration: CFTimeInterval=1) -> Self {
+        let x = (layer.presentation()?.frame.origin.x ?? layer.frame.origin.x) + to
+        return move(from: from, x: x, duration: duration)
+    }
+    
+    @discardableResult
+    func move(from: CGFloat?=nil, offsetY to: CGFloat, duration: CFTimeInterval=1) -> Self {
+        let y = (layer.presentation()?.frame.origin.y ?? layer.frame.origin.y) + to
+        return move(from: from, y: y, duration: duration)
+    }
+}
+
+extension UKAnimation {
+    @discardableResult
+    func flip(v: Bool, duration: CFTimeInterval=1) -> Self {
+        if v {
+            let anim = CABasicAnimation(keyPath: "transform.rotation.x")
+            anim.toValue = Double.pi
+            anim.duration = duration
+            return add(animation: anim)
         } else {
-            des = CATransform3DScale(scr, to[0], to[1], 1)
-        }
-        return change(transform: des, then: then)
-    }
-    
-    @discardableResult
-    func scale(to: CGFloat, then: Then?=nil) -> Self {
-        let scr = self.animateView.layer.transform
-        let des = CATransform3DScale(scr, to, to, 1)
-        return change(transform: des, then: then)
-    }
-    
-    enum Direction {
-        case vertical,horizontal
-    }
-    @discardableResult
-    func flip(_ direction: Direction = .horizontal, then: Then?=nil) -> Self {
-        switch direction {
-        case .horizontal:
-            return scale(to: [-1,1], then: then)
-        case .vertical:
-            return scale(to: [1,-1], then: then)
+            let anim = CABasicAnimation(keyPath: "transform.rotation.y")
+            anim.toValue = Double.pi
+            anim.duration = duration
+            return add(animation: anim)
         }
     }
     
     @discardableResult
-    func fade(_ alpha: CGFloat, then: Then?=nil) -> Self {
-        assert(Thread.isMainThread, "is not main thread")
-        
-        let animations = {
-            self.animateView.alpha = alpha
-        }
-        let completion = { (isFinish: Bool) -> Void in
-            then?(self)
-        }
-        UIView.animate(withDuration: self.duration,
-                       delay: self.delay,
-                       usingSpringWithDamping: self.damping,
-                       initialSpringVelocity: self.velocity,
-                       options: self.options,
-                       animations: animations, completion: completion)
-        return self
+    func shakeR(radian: Double=5, times: Float=3,duration: CFTimeInterval=0.4) -> Self {
+        let anim = CAKeyframeAnimation(keyPath: "transform.rotation")
+        anim.values = [(radian/180 * Double.pi),
+                       (-radian/180 * Double.pi),
+                       (radian/180 * Double.pi)]
+        anim.repeatCount = times
+        anim.duration = duration / Double(times)
+        return add(animation: anim)
     }
     
     @discardableResult
-    func stop() -> Self {
-        let nowT = self.animateView.layer.presentation()?.transform
-        self.animateView.layer.removeAllAnimations()
-        self.animateView.layer.transform = nowT ?? CATransform3DIdentity
-        return self
+    func shakeX(range: Int=5,times: Float=3,duration: CFTimeInterval=0.4) -> Self {
+        let anim = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        anim.values = [range,-range,range]
+        anim.repeatCount = times
+        anim.duration = duration / Double(times)
+        return add(animation: anim)
     }
     
     @discardableResult
-    func reset() -> Self {
-        self.animateView.layer.removeAllAnimations()
-        self.animateView.layer.transform = CATransform3DIdentity
-        return self
+    func shakeY(range: Int=5,times: Float=3,duration: CFTimeInterval=0.4) -> Self {
+        let anim = CAKeyframeAnimation(keyPath: "transform.translation.y")
+        anim.values = [range,-range,range]
+        anim.repeatCount = times
+        anim.duration = duration / Double(times)
+        return add(animation: anim)
     }
-    
-    // MARK: Private Animate
-    @discardableResult
-    fileprivate func move(with toFrame: CGRect, then: Then?) -> Self {
-        assert(Thread.isMainThread, "is not main thread")
-        
-        let animations = {
-            self.animateView.frame = toFrame
-        }
-        let completion = { (isFinish: Bool) -> Void in
-            then?(self)
-        }
-        UIView.animate(withDuration: self.duration,
-                       delay: self.delay,
-                       usingSpringWithDamping: self.damping,
-                       initialSpringVelocity: self.velocity,
-                       options: self.options,
-                       animations: animations, completion: completion)
-        return self
-    }
-    
-    @discardableResult
-    fileprivate func change(transform: CATransform3D, then: Then?) -> Self {
-        assert(Thread.isMainThread, "is not main thread")
-        
-        let animations = {
-            self.animateView.layer.transform = transform
-        }
-        let completion = { (isFinish: Bool) -> Void in
-            then?(self)
-        }
-        UIView.animate(withDuration: self.duration,
-                       delay: self.delay,
-                       usingSpringWithDamping: self.damping,
-                       initialSpringVelocity: self.velocity,
-                       options: self.options,
-                       animations: animations, completion: completion)
-        return self
-    }
-    
 }

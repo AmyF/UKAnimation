@@ -8,97 +8,81 @@
 
 import UIKit
 
-class CustomBtn: UIButton {
-    deinit {
-        print("jojo")
-    }
-}
-
 class ViewController: UIViewController {
 
-    typealias Animate = UKAnimation
-    typealias GroupAnimate = UKGroupAnimation
+    typealias Animation = UKAnimation
     
-    @IBOutlet weak var btn: UIButton!
+    let actions: [String:Selector] = [
+        "shakeR":#selector(shakeR),
+        "shakeX":#selector(shakeX),
+        "shakeY":#selector(shakeY),
+        "flip":#selector(flip),
+        "move":#selector(move),
+        "fade":#selector(fade),
+        "group":#selector(group),
+    ]
     
-    var cBtn: CustomBtn! = CustomBtn(frame: CGRect(x: 100, y: 200, width: 60, height: 60))
+    let animView = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
+    let stackView = UIStackView(frame: CGRect(x: 0, y: UIScreen.main.bounds.height - 40 - 60,
+                                              width: UIScreen.main.bounds.width, height: 60))
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        btn.frame = CGRect(x: 100, y: 100, width: 50, height: 50)
-        btn.backgroundColor = .red
+        self.view.backgroundColor = .white
         
-        cBtn.backgroundColor = .green
-        cBtn.addTarget(self, action: #selector(cBtnMove), for: .touchUpInside)
-        self.view.addSubview(cBtn)
+        animView.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+        animView.backgroundColor = .green
         
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        stackView.alignment = .center
+        stackView.spacing = 5
+        stackView.axis = .horizontal
+        
+        for (name, sel) in actions {
+            let btn = UIButton(type: .custom)
+            btn.backgroundColor = .red
+            btn.setTitleColor(.white, for: .normal)
+            btn.setTitle(name, for: .normal)
+            btn.addTarget(self, action: sel, for: .touchUpInside)
+            stackView.addArrangedSubview(btn)
+        }
+        
+        self.view.addSubview(animView)
+        self.view.addSubview(stackView)
     }
     
-    @objc func cBtnMove() {
-        GroupAnimate(view: cBtn)
-            .fade(from: 1, to: 0.3)
-            .modify
-            {
-                guard let anim = $0 else {return}
-                anim.fillMode = kCAFillModeForwards
-                anim.isRemovedOnCompletion = false
-                print(anim.duration,anim.beginTime)
-            }
-            .move(offsetX: 150)
-            .modify
-            {
-                guard let anim = $0 else {return}
-                anim.fillMode = kCAFillModeForwards
-                anim.isRemovedOnCompletion = false
-                print(anim.duration,anim.beginTime)
-            }
-            .group()
-            .modify
-            {
-                guard let anim = $0 else {return}
-                anim.fillMode = kCAFillModeForwards
-                anim.isRemovedOnCompletion = false
-                print(anim.duration,anim.beginTime)
-            }
+    @objc func shakeR() {
+        Animation(view: animView).shakeR().run()
+    }
+    
+    @objc func shakeX() {
+        Animation(view: animView).shakeX().run()
+    }
+    
+    @objc func shakeY() {
+        Animation(view: animView).shakeY().run()
+    }
+    
+    @objc func flip() {
+        Animation(view: animView).flip(v: true).run()
+    }
+    
+    @objc func move() {
+        Animation(view: animView).move(to: [100,100]).modify{$0?.autoreverses = true}.run()
+    }
+    
+    @objc func fade() {
+        Animation(view: animView).fade(from: 1, to: 0).modify{$0?.autoreverses = true}.run()
+    }
+    
+    @objc func group() {
+        Animation(view: animView)
+            .move(to: [100,100]).stay()
+            .fade(from: 1, to: 0).modify{$0?.autoreverses = true}.stay()
+            .move(to: [300,400]).after(begin: 1, willGroup: true).stay()
+            .shakeR(radian:10, times:4, duration:0.5).after(begin: 1.5, willGroup: true)
+            .group().duration(2).modify{$0?.autoreverses = true}
             .run()
     }
-
-    @IBAction func tap(_ sender: Any) {
-        let v1 = UIView(frame: CGRect(x: 50, y: 300, width: 60, height: 60))
-        v1.backgroundColor = .blue
-        self.view.addSubview(v1)
-        let v2 = UIView(frame: CGRect(x: 150, y: 300, width: 60, height: 60))
-        v2.backgroundColor = .orange
-        self.view.addSubview(v2)
-        animate1(view: v1)
-        animate2(view: v2)
-    }
     
-    func animate1(view: UIView) {
-        Animate(view: view)
-            .set(duration: 4)
-            .set(damping: 4)
-            .set(velocity: 5)
-            .scale(to: [2,2])
-            .move(offset: [50,50])
-    }
-    
-    func animate2(view: UIView) {
-        Animate(view: view)
-            .set(duration: 4)
-            .set(damping: 4)
-            .set(velocity: 5)
-            .scale(to: [2,2])
-            .move(offset: [50,50])
-            .after(1) { (animate) in
-                animate.stop()
-        }
-    }
 }
 

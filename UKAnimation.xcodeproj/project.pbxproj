@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9A877A1C213D4E7200FBB0F2 /* UKGroupAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A877A1B213D4E7200FBB0F2 /* UKGroupAnimation.swift */; };
 		9ABB0CA1213CF56800BE8A74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABB0CA0213CF56800BE8A74 /* AppDelegate.swift */; };
 		9ABB0CA3213CF56800BE8A74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABB0CA2213CF56800BE8A74 /* ViewController.swift */; };
-		9ABB0CA6213CF56800BE8A74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ABB0CA4213CF56800BE8A74 /* Main.storyboard */; };
 		9ABB0CA8213CF57000BE8A74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9ABB0CA7213CF57000BE8A74 /* Assets.xcassets */; };
 		9ABB0CAB213CF57000BE8A74 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9ABB0CA9213CF57000BE8A74 /* LaunchScreen.storyboard */; };
 		9ABB0CB7213CF61D00BE8A74 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9ABB0CB5213CF61D00BE8A74 /* README.md */; };
@@ -19,11 +17,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		9A877A1B213D4E7200FBB0F2 /* UKGroupAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UKGroupAnimation.swift; sourceTree = "<group>"; };
 		9ABB0C9D213CF56800BE8A74 /* UKAnimation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UKAnimation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9ABB0CA0213CF56800BE8A74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9ABB0CA2213CF56800BE8A74 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		9ABB0CA5213CF56800BE8A74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9ABB0CA7213CF57000BE8A74 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9ABB0CAA213CF57000BE8A74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9ABB0CAC213CF57000BE8A74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -67,7 +63,6 @@
 			children = (
 				9ABB0CA0213CF56800BE8A74 /* AppDelegate.swift */,
 				9ABB0CA2213CF56800BE8A74 /* ViewController.swift */,
-				9ABB0CA4213CF56800BE8A74 /* Main.storyboard */,
 				9ABB0CA7213CF57000BE8A74 /* Assets.xcassets */,
 				9ABB0CA9213CF57000BE8A74 /* LaunchScreen.storyboard */,
 				9ABB0CAC213CF57000BE8A74 /* Info.plist */,
@@ -79,7 +74,6 @@
 			isa = PBXGroup;
 			children = (
 				9ABB0CB9213CF63100BE8A74 /* UKAnimation.swift */,
-				9A877A1B213D4E7200FBB0F2 /* UKGroupAnimation.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -145,7 +139,6 @@
 				9ABB0CAB213CF57000BE8A74 /* LaunchScreen.storyboard in Resources */,
 				9ABB0CA8213CF57000BE8A74 /* Assets.xcassets in Resources */,
 				9ABB0CB7213CF61D00BE8A74 /* README.md in Resources */,
-				9ABB0CA6213CF56800BE8A74 /* Main.storyboard in Resources */,
 				9ABB0CB8213CF61D00BE8A74 /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,7 +152,6 @@
 			files = (
 				9ABB0CBA213CF63100BE8A74 /* UKAnimation.swift in Sources */,
 				9ABB0CA3213CF56800BE8A74 /* ViewController.swift in Sources */,
-				9A877A1C213D4E7200FBB0F2 /* UKGroupAnimation.swift in Sources */,
 				9ABB0CA1213CF56800BE8A74 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -167,14 +159,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		9ABB0CA4213CF56800BE8A74 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9ABB0CA5213CF56800BE8A74 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		9ABB0CA9213CF57000BE8A74 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -307,6 +291,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D4B8JDZJT6;
 				INFOPLIST_FILE = UKAnimation/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -325,6 +310,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = D4B8JDZJT6;
 				INFOPLIST_FILE = UKAnimation/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
