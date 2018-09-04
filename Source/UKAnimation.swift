@@ -9,7 +9,7 @@
 import UIKit
 
 
-class UKAnimation {
+public class UKAnimation {
     deinit {
         #if DEBUG
         print("UKGroupAnimation[\(layer)] was deinit ")
@@ -19,11 +19,11 @@ class UKAnimation {
     fileprivate let layer: CALayer
     fileprivate var animations: [CAAnimation] = []
     
-    convenience init(view: UIView) {
-        self.init(layer: view.layer)
+    public convenience init(_ view: UIView) {
+        self.init(view.layer)
     }
     
-    init(layer: CALayer) {
+    public init(_ layer: CALayer) {
         self.layer = layer
     }
     
@@ -115,7 +115,7 @@ class UKAnimation {
             print("AnimationItem[] was deinit")
         }
         
-        typealias Handler = (_ anim: CAAnimation) -> Swift.Void
+        public typealias Handler = (_ anim: CAAnimation) -> Swift.Void
         
         let begin: Handler?
         let end: Handler?
@@ -125,11 +125,11 @@ class UKAnimation {
             self.end = end
         }
         
-        func animationDidStart(_ anim: CAAnimation) {
+        public func animationDidStart(_ anim: CAAnimation) {
             begin?(anim)
         }
         
-        func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
             end?(anim)
         }
     }
@@ -137,7 +137,7 @@ class UKAnimation {
 }
 
 // MARK: Animation
-extension UKAnimation {
+public extension UKAnimation {
     @discardableResult
     public func fade(from: CGFloat, to: CGFloat, duration: CFTimeInterval=1) -> Self {
         let animation = CABasicAnimation(keyPath: "opacity")
