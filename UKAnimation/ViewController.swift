@@ -42,12 +42,31 @@ class ViewController: UIViewController {
     
     @objc func cBtnMove() {
         GroupAnimate(view: cBtn)
-            .fade(from: 1, to: 0)
-            .afterEnd(GroupAnimate.Item {
-                print("fade 1->0 done")
-            }).move(x: 200).afterEnd(UKGroupAnimation.Item{
-                print("move x -> 200 done")
-            }).run()
+            .fade(from: 1, to: 0.3)
+            .modify
+            {
+                guard let anim = $0 else {return}
+                anim.fillMode = kCAFillModeForwards
+                anim.isRemovedOnCompletion = false
+                print(anim.duration,anim.beginTime)
+            }
+            .move(offsetX: 150)
+            .modify
+            {
+                guard let anim = $0 else {return}
+                anim.fillMode = kCAFillModeForwards
+                anim.isRemovedOnCompletion = false
+                print(anim.duration,anim.beginTime)
+            }
+            .group()
+            .modify
+            {
+                guard let anim = $0 else {return}
+                anim.fillMode = kCAFillModeForwards
+                anim.isRemovedOnCompletion = false
+                print(anim.duration,anim.beginTime)
+            }
+            .run()
     }
 
     @IBAction func tap(_ sender: Any) {
