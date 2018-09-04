@@ -1,5 +1,7 @@
 # UKAnimation
 
+## Pod
+pod 'UKAnimation'
 
 ## Example
 ```
