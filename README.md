@@ -1,4 +1,5 @@
 # UKAnimation
+CoreAnimation的链式调用的封装
 
 ## Pod
 pod 'UKAnimation'
