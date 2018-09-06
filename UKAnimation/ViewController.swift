@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         "flip":#selector(flip),
         "move":#selector(move),
         "fade":#selector(fade),
-        "group":#selector(group),
+        "group":#selector(group)
     ]
     
     let animView = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
@@ -62,11 +62,14 @@ class ViewController: UIViewController {
         Animation(animView)
             .shakeY()
             .handler(begin: {print($0)}, end: {print($0)})
+            .modify{print($0 ?? "")}
+            .change(key: "new_name_shakeY")
+            .modify{print($0 ?? "")}
             .run()
     }
     
     @objc func flip() {
-        Animation(animView).flip(v: true).run()
+        Animation(animView).flip(v: true).duration(0.3).run()
     }
     
     @objc func move() {
@@ -83,8 +86,10 @@ class ViewController: UIViewController {
             .fade(from: 1, to: 0).modify{$0?.autoreverses = true}.stay()
             .move(to: [300,200]).after(begin: 1, willGroup: true).stay()
             .shakeR(radian:10, times:4, duration:0.5).after(begin: 1.5, willGroup: true)
-            .forEach {print($0,$1); return true}
+            .forEach {print($0,$1,$2); return true}
             .group().duration(2).modify{$0?.autoreverses = true}
+            .change(key: "group_01")
+            .forEach {print($0,$1,$2); return true}
             .run()
     }
     
