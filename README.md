@@ -1,4 +1,5 @@
 # UKAnimation
+CoreAnimation的链式调用的封装
 
 ## Pod
 pod 'UKAnimation'
@@ -24,6 +25,7 @@ UKAnimation(animView)
 UKAnimation./* animation */.modify{$0?.autoreverses = true}.run()
 ```
 UKAnimation也提供了 _forEach_ 去遍历每一个 _animation_
+    
 _handler(begin: Item.Handler? = default, end: Item.Handler? = default)_ 可以对最后一个 _animation_ 设置回调
 
 除了自带的几个小动画，你也可以通过 _extension_ 去添加动画
