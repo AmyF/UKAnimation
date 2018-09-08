@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
 
   s.name            = "UKAnimation"
   s.version         = "0.0.2"
-  s.summary         = "对CAAnimation进行了封装并且提供了一些简单的动画"
+  s.summary         = "UKAnimation对CAAnimation进行了封装并且提供了一些简单的动画"
 
   s.homepage        = "https://github.com/AmyF/UKAnimation"
   s.license         = { :type => "Apache License 2.0", :file => "LICENSE" }

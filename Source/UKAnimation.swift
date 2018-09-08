@@ -56,7 +56,7 @@ public class UKAnimation {
     /// - Parameter animation: CAAnimation
     /// - Returns: self
     @discardableResult
-    public func add(animation: CAAnimation, key: String?=nil) -> Self {
+    public func add(key: String?=nil, animation: CAAnimation) -> Self {
         animations.append((key: getNewKey(with: key), value: animation))
         return self
     }
@@ -66,7 +66,7 @@ public class UKAnimation {
     /// - Parameter handler: handler返回一个CAAnimation
     /// - Returns: self
     @discardableResult
-    public func add(animation handler: (CALayer) -> CAAnimation, key: String?=nil) -> Self {
+    public func add(key: String?=nil, animation handler: (CALayer) -> CAAnimation) -> Self {
         animations.append((key: getNewKey(with: key), value: handler(layer)))
         return self
     }
