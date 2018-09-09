@@ -10,11 +10,6 @@ import UIKit
 
 
 public class UKAnimation {
-    deinit {
-        #if DEBUG
-        print("UKGroupAnimation[\(layer)] was deinit ")
-        #endif
-    }
     
     fileprivate let layer: CALayer
     fileprivate var animations: [(key:String,value:CAAnimation)] = []
@@ -156,9 +151,6 @@ public class UKAnimation {
     
     // MARK: Setter
     public class Item: NSObject, CAAnimationDelegate {
-        deinit {
-            print("AnimationItem[] was deinit")
-        }
         
         public typealias Handler = (_ anim: CAAnimation) -> Swift.Void
         
