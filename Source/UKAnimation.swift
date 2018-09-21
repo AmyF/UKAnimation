@@ -114,7 +114,7 @@ public class UKAnimation {
     @discardableResult
     public func stay() -> Self {
         if let anim = animations.last?.value {
-            anim.fillMode = kCAFillModeForwards
+            anim.fillMode = CAMediaTimingFillMode.forwards
             anim.isRemovedOnCompletion = false
         }
         return self
