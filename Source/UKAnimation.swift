@@ -23,7 +23,7 @@ public class UKAnimation {
     }
     
     fileprivate func getNewKey(with key:String?=nil) -> String {
-        return key ?? "unko_anim_\(animations.count)"
+        return key ?? "online.unko.animation.\(animations.count)"
     }
     
     // MARK: Operation
@@ -175,19 +175,6 @@ public class UKAnimation {
         }
     }
     
-}
-
-/// 你可以用这个类来创建 并得到单个或者一系列动画
-public class UKNoAnimation: UKAnimation {
-    
-    init() {
-        super.init(CALayer())
-    }
-    
-    public override func run() {
-        fatalError("UKNoAnimation dont want to run")
-    }
-    
     public func animation(by key: String) -> CAAnimation? {
         for (mykey,myValue) in animations {
             if mykey == key {
@@ -199,6 +186,40 @@ public class UKNoAnimation: UKAnimation {
     
     public func allAnimation() -> [(key:String,value:CAAnimation)] {
         return animations
+    }
+}
+
+public extension UIView {
+    public class UK {
+        let val: UIView
+        init(val: UIView) {
+            self.val = val
+        }
+        
+        var anim: UKAnimation {
+            return UKAnimation(val)
+        }
+    }
+    
+    public var uk: UK {
+        return UK(val: self)
+    }
+}
+
+public extension CALayer {
+    public class UK {
+        let val: CALayer
+        init(val: CALayer) {
+            self.val = val
+        }
+        
+        var anim: UKAnimation {
+            return UKAnimation(val)
+        }
+    }
+    
+    public var uk: UK {
+        return UK(val: self)
     }
 }
 

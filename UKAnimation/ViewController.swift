@@ -51,15 +51,15 @@ class ViewController: UIViewController {
     }
     
     @objc func shakeR() {
-        Animation(animView).shakeR().run()
+        animView.uk.anim.shakeR().run()
     }
     
     @objc func shakeX() {
-        Animation(animView).shakeX().run()
+        animView.uk.anim.shakeX().run()
     }
     
     @objc func shakeY() {
-        Animation(animView)
+        animView.uk.anim
             .shakeY()
             .handler(begin: {print($0)}, end: {print($0)})
             .modify{print($0 ?? "")}
